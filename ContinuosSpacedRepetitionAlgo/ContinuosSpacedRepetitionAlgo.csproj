@@ -59,7 +59,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="videos.txt">
+    <Content Include="dialog-videos.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="vocab-videos.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

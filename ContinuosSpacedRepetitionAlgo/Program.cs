@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using ContinuosSpacedRepetition.Models;
 
 namespace ContinuosSpacedRepetitionAlgo
 {
@@ -16,8 +12,28 @@ namespace ContinuosSpacedRepetitionAlgo
             var learning = new List<Item>();
             var allVideos = new List<Item>();
 
-            string[] videos = File.ReadAllLines("./videos.txt");
+            string[] vocabVideos = File.ReadAllLines("./vocab-videos.txt");
+            string[] dialogVideos = File.ReadAllLines("./dialog-videos.txt");
 
+            var videos = new List<string>();
+
+            var biggerList = (vocabVideos.Length > dialogVideos.Length) ? new List<string>(vocabVideos) : new List<string>(dialogVideos);
+            var smallList = (vocabVideos.Length < dialogVideos.Length) ? new List<string>(vocabVideos) : new List<string>(dialogVideos);
+
+            foreach (var item in biggerList)
+            {
+                videos.Add(item);
+
+                var otherList = smallList.FirstOrDefault();
+
+                if (otherList != null)
+                {
+                    videos.Add(otherList);
+                    smallList.Remove(otherList);
+                }
+            }
+
+ 
             foreach (var video in videos)
             {
                 var url = "https://www.youtube.com" + video.Substring(0, video.IndexOf("&"));
@@ -94,7 +110,7 @@ namespace ContinuosSpacedRepetitionAlgo
                 {
                     playList += footerPlayList;
 
-                    File.WriteAllText(string.Format("./Playlists/playlist-{0}.xspf", id), playList);
+                    File.WriteAllText(string.Format("./Playlists/playlist-{0}.xspf", id.ToString("D8")), playList);
                     
                     playList = headerPLaylist;
                 }
@@ -125,7 +141,7 @@ namespace ContinuosSpacedRepetitionAlgo
 
             playList += footerPlayList;
 
-            File.WriteAllText(string.Format("./Playlists/playlist-{0}.xspf", id), playList);
+            File.WriteAllText(string.Format("./Playlists/playlist-{0}.xspf", id.ToString("D8")), playList);
         }
     }
 }
