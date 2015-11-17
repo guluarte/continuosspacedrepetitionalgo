@@ -9,7 +9,9 @@ namespace ContinuosSpacedRepetitionAlgo
     class Item
     {
         public string Video { get; set; }
-        public long Interval { get; set; }
+        public double Interval { get; set; }
         public DateTime LastView { get; set; }
+
+        public int Views { get; set; }
     }
 }
