@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 
@@ -10,17 +11,23 @@ namespace ContinuosSpacedRepetitionAlgo
         static void Main(string[] args)
         {
             var learning = new List<Item>();
-            var allVideos = new List<Item>();
+            var allVideos = new List<Item>();   
 
-            var classes = Directory.EnumerateFiles("C:\\path\\clases\\").ToList();
-            var busuuVocab = Directory.EnumerateFiles("C:\\path\\bussu\\").ToList();
+            bool lookVideosIndirectory;
+
+            bool.TryParse(ConfigurationManager.AppSettings["lookVideosInDirectory"], out lookVideosIndirectory);
+
 
             var vocabVideos = new List<string>(File.ReadAllLines("./vocab-videos.txt"));
             var dialogVideos = new List<string>(File.ReadAllLines("./dialog-videos.txt"));
 
-
-            dialogVideos = classes;
-            vocabVideos = busuuVocab;
+            if(lookVideosIndirectory)
+            {
+                var videoClassesDir = ConfigurationManager.AppSettings["videoClassesPath"];
+                var vocabClassesDir = ConfigurationManager.AppSettings["videoVocabPath"];
+                dialogVideos = Directory.EnumerateFiles(videoClassesDir).ToList();
+                vocabVideos = Directory.EnumerateFiles(vocabClassesDir).ToList();
+            }
 
             var videos = new List<string>();
 
@@ -122,7 +129,7 @@ namespace ContinuosSpacedRepetitionAlgo
 
                 playList += string.Format("{0}{1}", getNextLearningVideo.Video, Environment.NewLine);
 
-                if (id % 100 == 0)
+                if (id % 300 == 0)
                 {
                     
                     File.WriteAllText(string.Format("./Playlists/playlist-{0}.m3u", id.ToString("D8")), playList);
